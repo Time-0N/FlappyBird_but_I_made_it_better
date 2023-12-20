@@ -5,17 +5,31 @@ public class Main {
 
     //coded by Time_ON aka the xXMasterBaiterXx
 
-    public static boolean checkForGameOver(int[][] playField) {
-        boolean gameOver = false;
+    public static int[] shieldManager(int[][] playField, int player) {
+
+    }
+
+    public static int[][] shieldItem(int[][] playField) {
+        Random random = new Random();
+        int shieldSpawnPos = random.nextInt(6 + 1) + 1;
+
+        if (playField[shieldSpawnPos][8] == 0) {
+            playField[shieldSpawnPos][8] = 4;
+        }
+    }
+
+    public static int[] checkForGameOver(int[][] playField, int[] player) {
 
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                if (playField[i][j] == 3) {
-                    gameOver = true;
+                if (playField[i][j] == 3 && player[3] != 1) {
+                    player[4] = 1;
+                } else if (player[3] == 1) {
+                    player[3] = 0;
                 }
             }
         }
-        return gameOver;
+        return player;
     }
 
     public static void printPlayField(int[][] playField) {
@@ -28,8 +42,10 @@ public class Main {
                     System.out.print(" " + "*" + " ");
                 } else if (playField[i][j] == 2) {
                     System.out.print(" " + "|" + " ");
-                } else if (playField[i][j] == 3) {
+                } else if (playField[i][j] == 3 || playField[i][j] == 6) {
                     System.out.print(" " + "X" + " ");
+                } else if (playField[i][j] == 4 || playField[i][j] == 5) {
+                    System.out.print(" " + "A" + " ");
                 }
             }
         }
@@ -118,7 +134,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        int player[] = {4,0,0};
+        int player[] = {4,0,0,0,0};
         int generateObstacle = 0;
         boolean gameOver = false;
 
@@ -134,7 +150,7 @@ public class Main {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0}
         };
 
-        while(!gameOver) {
+        while(player[4] == 0) {
             System.out.println("Score: " + player[2]);
             player = movePlayer(player);
             playField = movePlayingField(playField,player);
@@ -144,7 +160,7 @@ public class Main {
                 player[2]++;
             }
             generateObstacle++;
-            gameOver = checkForGameOver(playField);
+            player = checkForGameOver(playField,player);
             printPlayField(playField);
         }
 
